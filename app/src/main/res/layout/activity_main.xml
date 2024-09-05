@@ -57,7 +57,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/rounded_corner"
             android:text="Login"
-            android:textColor="@color/black"
+            android:textColor="#C5E1A5"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -76,12 +76,13 @@
             android:layout_marginTop="8dp">
 
             <ImageView
+                android:id="@+id/google_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="16dp"
-                android:id="@+id/google_button"
                 android:importantForAccessibility="no"
-                android:src="@drawable/google_icon" />
+                android:src="@drawable/google_icon"
+                tools:ignore="ImageContrastCheck" />
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -97,15 +98,16 @@
             android:textSize="20sp"
             android:textColor="@color/white"
             tools:ignore="HardcodedText" />
+
         <Button
-            android:layout_marginTop="20dp"
+            android:id="@+id/register_button"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@drawable/rounded_corner"
             android:text="Register"
-            android:textColor="@color/black"
-            tools:ignore="HardcodedText"
-            android:id="@+id/register_button"/>
+            android:textColor="#C5E1A5"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
 
