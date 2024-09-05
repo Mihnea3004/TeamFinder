@@ -31,10 +31,11 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/rounded_corner"
             android:hint="E-mail"
+            android:paddingStart="16dp"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             android:textColorHint="@color/white"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText,RtlSymmetry" />
 
         <EditText
             android:id="@+id/email_verification"
@@ -42,12 +43,13 @@
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
+            android:paddingStart="16dp"
             android:background="@drawable/rounded_corner"
             android:hint="E-mail Verification"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             android:textColorHint="@color/white"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText,RtlSymmetry" />
 
         <EditText
             android:id="@+id/password"
@@ -55,12 +57,13 @@
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
+            android:paddingStart="16dp"
             android:background="@drawable/rounded_corner"
             android:hint="Password"
             android:importantForAutofill="no"
             android:inputType="textPassword"
             android:textColorHint="@color/white"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText,RtlSymmetry" />
 
         <EditText
             android:id="@+id/password_verification"
@@ -68,12 +71,13 @@
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
+            android:paddingStart="16dp"
             android:background="@drawable/rounded_corner"
             android:hint="Password Verification"
             android:importantForAutofill="no"
             android:inputType="textPassword"
             android:textColorHint="@color/white"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText,RtlSymmetry" />
 
         <Button
             android:layout_width="110dp"
