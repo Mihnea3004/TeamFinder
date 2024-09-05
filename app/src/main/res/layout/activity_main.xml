@@ -24,7 +24,7 @@
         <EditText
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="70dp"
             android:autofillHints=""
             android:hint="Username"
             android:textColorHint="@color/white"
@@ -88,14 +88,23 @@
                 android:layout_margin="16dp"
                 android:id="@+id/facebook_button"
                 android:importantForAccessibility="no" android:src="@drawable/facebook_icon" />
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="16dp"
-                android:id="@+id/riot_button"
-                android:importantForAccessibility="no"
-                android:src="@drawable/riot_icon" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account yet?"
+            android:textSize="20dp"
+            android:textColor="@color/white" />
+        <Button
+            android:layout_marginTop="20dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            android:text="Register"
+            android:textColor="@color/black"
+            tools:ignore="HardcodedText"
+            android:id="@+id/register_button"/>
     </LinearLayout>
 
 
