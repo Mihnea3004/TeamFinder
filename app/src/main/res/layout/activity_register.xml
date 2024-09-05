@@ -15,7 +15,6 @@
         android:layout_height="40dp"
         android:importantForAccessibility="no"
         android:src="@drawable/back_arrow"
-        android:background= ""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,51 +25,54 @@
         android:gravity="center">
 
         <EditText
+            android:id="@+id/email"
             android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:background="@drawable/rounded_corner"
+            android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_corner"
             android:hint="E-mail"
             android:importantForAutofill="no"
-            android:textColorHint="@color/white"
-            android:id="@+id/email"
             android:inputType="textEmailAddress"
+            android:textColorHint="@color/white"
             tools:ignore="HardcodedText" />
+
         <EditText
+            android:id="@+id/email_verification"
             android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:background="@drawable/rounded_corner"
-            android:layout_marginTop="40dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/rounded_corner"
             android:hint="E-mail Verification"
             android:importantForAutofill="no"
-            android:textColorHint="@color/white"
-            android:id="@+id/email_verification"
             android:inputType="textEmailAddress"
+            android:textColorHint="@color/white"
             tools:ignore="HardcodedText" />
+
         <EditText
+            android:id="@+id/password"
             android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:background="@drawable/rounded_corner"
-            android:layout_marginTop="40dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/rounded_corner"
             android:hint="Password"
             android:importantForAutofill="no"
-            android:textColorHint="@color/white"
-            android:id="@+id/password"
             android:inputType="textPassword"
+            android:textColorHint="@color/white"
             tools:ignore="HardcodedText" />
+
         <EditText
+            android:id="@+id/password_verification"
             android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:background="@drawable/rounded_corner"
-            android:layout_marginTop="40dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/rounded_corner"
             android:hint="Password Verification"
             android:importantForAutofill="no"
-            android:textColorHint="@color/white"
-            android:id="@+id/password_verification"
             android:inputType="textPassword"
+            android:textColorHint="@color/white"
             tools:ignore="HardcodedText" />
 
         <Button
