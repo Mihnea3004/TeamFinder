@@ -25,7 +25,6 @@ class Register : AppCompatActivity() {
 
         // Initialize Database Helper
         databaseHelper = DatabaseHelper(this)
-
         // Back button functionality
         backArrow.setOnClickListener {
             finish()  // Use finish() to return to the previous activity
@@ -36,35 +35,49 @@ class Register : AppCompatActivity() {
             val signUpUsername = binding.email.text.toString()
             val signUpPassword = binding.password.text.toString()
             registerUser(signUpUsername, signUpPassword)
-            finish()
         }
     }
 
     private fun registerUser(username: String, password: String) {
         val passwordMatch = password == binding.passwordVerification.text.toString()
         val emailMatch = username == binding.emailVerification.text.toString()
+        val playsLOL = binding.lolCheckbox.isChecked
+        val playsValorant = binding.valorantCheckbox.isChecked
+        val playsTFT = binding.tftCheckbox.isChecked
+        var valid = true
 
         if (passwordMatch && emailMatch) {
             // Check if user exists only by username, not both username and password
-            val userExists = databaseHelper.readUser(username,password)
-
-            if (!userExists) {
-                val insertId = databaseHelper.insertData(username, password)
-                if (insertId != -1L) {
-                    // Registration successful
-                    Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
+            val userExists = databaseHelper.readUser(username, password)
+            if (!playsLOL && !playsValorant && !playsTFT)
+                valid = false
+            if (valid) {
+                if (!userExists) {
+                    val insertId = databaseHelper.insertDataUsers(
+                        username,
+                        password,
+                        playsLOL,
+                        playsValorant,
+                        playsTFT
+                    )
+                    if (insertId != -1L) {
+                        // Registration successful
+                        Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, Login::class.java))
+                        finish()
+                    } else {
+                        // Registration failed
+                        Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
-                    // Registration failed
-                    Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show()
+                    // User already exists
+                    Toast.makeText(this, "User already exists", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                // User already exists
-                Toast.makeText(this, "User already exists", Toast.LENGTH_SHORT).show()
+            } else{
+                Toast.makeText(this, "Please select at least one game", Toast.LENGTH_SHORT).show()
             }
-        } else {
-                Toast.makeText(this, "Emails or passwords do not match", Toast.LENGTH_SHORT).show()
-            }
+        }else {
+            Toast.makeText(this, "Emails or passwords do not match", Toast.LENGTH_SHORT).show()
+        }
         }
     }

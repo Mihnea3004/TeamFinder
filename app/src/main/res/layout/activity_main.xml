@@ -1,114 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background = "@drawable/login_backgroud"
+    android:fitsSystemWindows="true"
     tools:context=".ui.MainActivity">
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="start">
+    <!-- LinearLayout for the header section -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:background="@color/black"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:src="@drawable/icon_account_circle"
-            tools:ignore="ContentDescription"
-            android:layout_marginTop="40dp"/>
-        <EditText
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
-            android:autofillHints=""
-            android:hint="Username"
-            android:textColorHint="@color/white"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:background="@drawable/rounded_corner"
-            tools:ignore="HardcodedText"
-            android:padding="18dp"
-            android:inputType="textEmailAddress"
-            android:id="@+id/username_input"/>
-        <EditText
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:hint="Password"
-            android:layout_marginTop="20dp"
-            android:textColorHint="@color/white"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:background="@drawable/rounded_corner"
-            tools:ignore="HardcodedText"
-            android:padding="18dp"
-            android:inputType="textPassword"
-            android:id="@+id/password_input"/>
-
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/rounded_corner"
-            android:text="Login"
-            android:textColor="#C5E1A5"
-            tools:ignore="HardcodedText" />
+        <!-- Left-side ImageButton (menu icon) -->
+        <ImageButton
+            android:id="@+id/open_nav"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/menu_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
         <TextView
+            android:id="@+id/game_selection"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Social Media Login"
+            android:layout_height="64dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            android:text="@string/game_name"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:layout_marginTop="20dp"
-            tools:ignore="HardcodedText" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="8dp">
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/filter_button"
+            app:layout_constraintStart_toEndOf="@+id/open_nav"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/google_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="16dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/google_icon"
-                tools:ignore="ImageContrastCheck" />
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="16dp"
-                android:id="@+id/facebook_button"
-                android:importantForAccessibility="no" android:src="@drawable/facebook_icon" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Don't have an account yet?"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            tools:ignore="HardcodedText" />
-
-        <Button
-            android:id="@+id/register_button"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/rounded_corner"
-            android:text="Register"
-            android:textColor="#C5E1A5"
-            tools:ignore="HardcodedText" />
+        <ImageButton
+            android:id="@+id/filter_button"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:src="@drawable/filter_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dynamicLayout"
+        android:orientation="horizontal">
     </LinearLayout>
+</LinearLayout>
 
 
-</RelativeLayout>
+    <!-- Navigation Drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:background="#36B3A1"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu"
+        app:itemTextAppearance="@style/ItemMenuTextAppearance"
+        tools:ignore="ResourceCycle,VisualLintBounds" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
