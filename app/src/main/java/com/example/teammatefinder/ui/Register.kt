@@ -21,7 +21,7 @@ class Register : AppCompatActivity() {
         // Initialize View Binding
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        backArrow = findViewById(R.id.reigster_back)
+        backArrow = findViewById(R.id.register_back)
 
         // Initialize Database Helper
         databaseHelper = DatabaseHelper(this)

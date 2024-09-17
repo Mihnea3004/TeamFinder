@@ -7,8 +7,12 @@
     <string name="navigation_settings">Settings</string>
     <string name="nav_menu_text">Navigation Menu</string>
     <string name="game_name">League of Legends</string>
-    <string-array name="dropdown">
-        <item>League of Legends</item>
-        <item>Valorant</item>
-    </string-array>
+    <string name="url"></string>
+    <string name="profile_Rank">Placeholder Rank</string>
+    <string name="profile_header">Profile Header Placeholder</string>
+    <string name="profile_rank_image">Rank Image Placeholder</string>
+    <string name="profile_winrate">Winrate Placeholder</string>
+    <string name="profile_server">Server Placeholder</string>
+    <string name="settings_header">Settings</string>
+    <string name="save_button">Save</string>
 </resources>

@@ -1,10 +1,12 @@
 package com.example.teammatefinder.ui
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -28,10 +30,14 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createUsersTableQuery = ("CREATE TABLE $TABLE_NAME_USERS ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_PASSWORD TEXT, $COLUMN_LOL_CHECK INTEGER, $COLUMN_VALORANT_CHECK INTEGER, $COLUMN_TFT_CHECK INTEGER)")
-        val createLolTableQuery = ("CREATE TABLE $TABLE_NAME_LOL ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_TAG TEXT, $COLUMN_DIVISION TEXT, $COLUMN_SERVER TEXT, $COLUMN_WINRATE DOUBLE)")
-        val createValorantTableQuery = ("CREATE TABLE $TABLE_NAME_VALORANT ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_TAG TEXT, $COLUMN_DIVISION TEXT, $COLUMN_SERVER TEXT, $COLUMN_WINRATE DOUBLE)")
-        val createTFTTableQuery = ("CREATE TABLE $TABLE_NAME_TFT ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_TAG TEXT, $COLUMN_DIVISION TEXT, $COLUMN_SERVER TEXT, $COLUMN_WINRATE DOUBLE)")
+        val createUsersTableQuery =
+            ("CREATE TABLE $TABLE_NAME_USERS ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_PASSWORD TEXT, $COLUMN_LOL_CHECK INTEGER, $COLUMN_VALORANT_CHECK INTEGER, $COLUMN_TFT_CHECK INTEGER)")
+        val createLolTableQuery =
+            ("CREATE TABLE $TABLE_NAME_LOL ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_TAG TEXT, $COLUMN_DIVISION TEXT, $COLUMN_SERVER TEXT, $COLUMN_WINRATE DOUBLE)")
+        val createValorantTableQuery =
+            ("CREATE TABLE $TABLE_NAME_VALORANT ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_TAG TEXT, $COLUMN_DIVISION TEXT, $COLUMN_SERVER TEXT, $COLUMN_WINRATE DOUBLE)")
+        val createTFTTableQuery =
+            ("CREATE TABLE $TABLE_NAME_TFT ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_TAG TEXT, $COLUMN_DIVISION TEXT, $COLUMN_SERVER TEXT, $COLUMN_WINRATE DOUBLE)")
         db?.execSQL(createUsersTableQuery)
         db?.execSQL(createLolTableQuery)
         db?.execSQL(createValorantTableQuery)
@@ -46,7 +52,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         onCreate(db)
     }
 
-    fun insertDataUsers(username: String, password: String, lol: Boolean, valorant: Boolean, tft: Boolean): Long {
+    fun insertDataUsers(
+        username: String,
+        password: String,
+        lol: Boolean,
+        valorant: Boolean,
+        tft: Boolean
+    ): Long {
         val values = ContentValues().apply {
             put(COLUMN_USERNAME, username)
             put(COLUMN_PASSWORD, password)
@@ -57,7 +69,39 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return writableDatabase.insert(TABLE_NAME_USERS, null, values)
     }
 
-    fun insertDataGame(game: String, username: String, tag: String, division: String, server: String, winrate: Double): Long {
+    fun replaceDataGame(
+        username: String,
+        game: String,
+        tag: String,
+        division: String,
+        server: String,
+        winrate: String
+    ): Int {
+        val values = ContentValues().apply {
+            put(COLUMN_TAG, tag)
+            put(COLUMN_DIVISION, division)
+            put(COLUMN_SERVER, server)
+            put(COLUMN_WINRATE, winrate)
+        }
+
+        val selection = "$COLUMN_USERNAME = ?"
+        val selectionArgs = arrayOf(username)
+
+        return when (game) {
+            "League of Legends" -> writableDatabase.update(TABLE_NAME_LOL, values, selection, selectionArgs)
+            "Valorant" -> writableDatabase.update(TABLE_NAME_VALORANT, values, selection, selectionArgs)
+            "TFT" -> writableDatabase.update(TABLE_NAME_TFT, values, selection, selectionArgs)
+            else -> throw IllegalArgumentException("Unsupported game type")
+        }
+    }
+    fun insertDataGame(
+        username: String,
+        game: String,
+        tag: String,
+        division: String,
+        server: String,
+        winrate: String
+    ): Long {
         val values = ContentValues().apply {
             put(COLUMN_USERNAME, username)
             put(COLUMN_TAG, tag)
@@ -66,19 +110,68 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put(COLUMN_WINRATE, winrate)
         }
         return when (game) {
-            "League of Legends" -> writableDatabase.insert(TABLE_NAME_LOL, null, values)
+            "League of Legends" -> writableDatabase.insert(TABLE_NAME_LOL,null, values)
             "Valorant" -> writableDatabase.insert(TABLE_NAME_VALORANT, null, values)
             "TFT" -> writableDatabase.insert(TABLE_NAME_TFT, null, values)
             else -> throw IllegalArgumentException("Unsupported game type")
         }
     }
 
-    fun retrieveDataUser(username: String, tableName: String): Cursor {
+    fun retrieveDataUser(username: String, tableName: String): Cursor? {
         val db = readableDatabase
-        val projection = arrayOf(COLUMN_LOL_CHECK, COLUMN_VALORANT_CHECK, COLUMN_TFT_CHECK)
         val selection = "$COLUMN_USERNAME = ?"
         val selectionArgs = arrayOf(username)
-        return db.query(tableName, projection, selection, selectionArgs, null, null, null)
+
+        // Define the projection (columns) based on the tableName
+        val projection: Array<String> = when (tableName) {
+            TABLE_NAME_LOL, TABLE_NAME_VALORANT, TABLE_NAME_TFT -> {
+                arrayOf(COLUMN_USERNAME, COLUMN_TAG, COLUMN_DIVISION, COLUMN_SERVER, COLUMN_WINRATE)
+            }
+            else -> {
+                arrayOf(COLUMN_USERNAME, COLUMN_LOL_CHECK, COLUMN_VALORANT_CHECK, COLUMN_TFT_CHECK)
+            }
+        }
+
+        // Use a try-finally block to ensure proper resource handling
+        var cursor: Cursor? = null
+        return try {
+            cursor = db.query(tableName, projection, selection, selectionArgs, null, null, null)
+
+            if (cursor.moveToFirst()) {
+                cursor // Return the cursor if data is found
+            } else {
+                Log.e("Database", "No data found for user: $username in table: $tableName")
+                cursor?.close() // Close the cursor if no data is found
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Error retrieving data for user: $username in table: $tableName", e)
+            cursor?.close() // Ensure the cursor is closed in case of an error
+            null
+        }
+    }
+
+
+
+
+    fun getAllPlayers(tableName: String): List<Player> {
+        val playerList = mutableListOf<Player>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT tag, division, winrate, server FROM $tableName", null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val tag = cursor.getString(cursor.getColumnIndexOrThrow("tag"))
+                val division = cursor.getString(cursor.getColumnIndexOrThrow("division"))
+                val winrate = cursor.getString(cursor.getColumnIndexOrThrow("winrate"))
+                val server = cursor.getDouble(cursor.getColumnIndexOrThrow("server"))
+                val username = cursor.getString(cursor.getColumnIndexOrThrow("username"))
+                playerList.add(Player(username, tag, division, winrate, server))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return playerList
     }
 
     fun readUser(username: String, password: String): Boolean {
@@ -90,4 +183,38 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         return userExists
     }
+
+    fun isFirstTimeEntry(username: String): Boolean {
+        val db = readableDatabase
+        val selection = "$COLUMN_USERNAME = ?"
+        val selectionArgs = arrayOf(username)
+        val cursor1 = db.query(TABLE_NAME_LOL, null, selection, selectionArgs, null, null, null)
+        val cursor2 =
+            db.query(TABLE_NAME_VALORANT, null, selection, selectionArgs, null, null, null)
+        val cursor3 = db.query(TABLE_NAME_TFT, null, selection, selectionArgs, null, null, null)
+        val userLolExists = cursor1.count > 0
+        val userValorantExists = cursor2.count > 0
+        val userTftExists = cursor3.count > 0
+        cursor1.close()
+        cursor2.close()
+        cursor3.close()
+        return !userTftExists && !userValorantExists && !userLolExists
+    }
+    fun getColumnIndexByName(tableName: String, columnName: String): Int {
+        val db = readableDatabase
+        // Query to fetch a limit of 1 row from the table to get the column info
+        val cursor: Cursor = db.query(tableName, null, null, null, null, null, null, "1")
+
+        // Use the cursor to get the column index
+        val columnIndex = cursor.getColumnIndex(columnName)
+        cursor.close()
+
+        // Check if column exists
+        if (columnIndex == -1) {
+            throw IllegalArgumentException("Column '$columnName' does not exist in table '$tableName'")
+        }
+
+        return columnIndex
+    }
+
 }

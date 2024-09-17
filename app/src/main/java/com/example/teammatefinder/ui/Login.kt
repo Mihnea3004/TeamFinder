@@ -2,6 +2,7 @@ package com.example.teammatefinder.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -25,11 +26,22 @@ class Login : AppCompatActivity() {
         val databaseHelper = DatabaseHelper(this)
         fun loginDatabase(username: String, password: String){
             val userExists = databaseHelper.readUser(username, password)
+            val firstTime = databaseHelper.isFirstTimeEntry(username)
             if (userExists) {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                if(firstTime) {
+                    val intent = Intent(this, Settings::class.java)
+                    intent.putExtra("username", userInput.text.toString())
+                    startActivity(intent)
+                    finish()
+                } else
+                {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("username", userInput.text.toString())
+                    startActivity(intent)
+                    finish()
+                }
+
             } else {
                 Toast.makeText(this, "Login failed, check your data or create an account", Toast.LENGTH_SHORT).show()
             }

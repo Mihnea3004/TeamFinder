@@ -58,7 +58,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dynamicLayout"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:isScrollContainer="true"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="outsideOverlay"
+        android:fitsSystemWindows="true"
+        android:nestedScrollingEnabled="true"
+        android:clipToPadding="true"
+        android:verticalScrollbarPosition="right">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerView" />
     </LinearLayout>
 </LinearLayout>
 
