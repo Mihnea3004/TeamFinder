@@ -56,7 +56,7 @@ class Profile : AppCompatActivity() {
                         }
                     }
                     serverView.text = lolServer
-                    winrateView.text = "${winrate.substring(0,5)}%"
+                    "${winrate.substring(0,5)}%".also { winrateView.text = it }
                     profileRankView.text = rank
                     updateRankView(rankNew)
 
@@ -127,7 +127,7 @@ class Profile : AppCompatActivity() {
 
 
     // Helper function to get rank value
-    private fun getRankValue(tier: String): Int {
+  /*  private fun getRankValue(tier: String): Int {
         return when (tier) {
             "UNRANKED" -> 0
             "IRON" -> 1
@@ -141,7 +141,7 @@ class Profile : AppCompatActivity() {
             "CHALLENGER" -> 9
             else -> 0
         }
-    }
+    } */
 
     private fun lolfetchMatchIdsByPuuid(puuid: String) {
         riotApiService2.getMatchIdsByPuuid(puuid, 0, 10, apiKEY)

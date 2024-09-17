@@ -1,6 +1,5 @@
 package com.example.teammatefinder.ui
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -199,22 +198,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cursor2.close()
         cursor3.close()
         return !userTftExists && !userValorantExists && !userLolExists
-    }
-    fun getColumnIndexByName(tableName: String, columnName: String): Int {
-        val db = readableDatabase
-        // Query to fetch a limit of 1 row from the table to get the column info
-        val cursor: Cursor = db.query(tableName, null, null, null, null, null, null, "1")
-
-        // Use the cursor to get the column index
-        val columnIndex = cursor.getColumnIndex(columnName)
-        cursor.close()
-
-        // Check if column exists
-        if (columnIndex == -1) {
-            throw IllegalArgumentException("Column '$columnName' does not exist in table '$tableName'")
-        }
-
-        return columnIndex
     }
 
 }

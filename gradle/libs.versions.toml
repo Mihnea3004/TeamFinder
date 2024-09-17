@@ -1,6 +1,6 @@
 [versions]
 agp = "8.6.0"
-appcompatVersion = "1.6.1"
+appcompatVersion = "1.7.0"
 converterGson = "2.9.0"
 gson = "2.10.1"
 kotlin = "1.9.0"
@@ -15,10 +15,10 @@ constraintlayout = "2.1.4"
 annotation = "1.8.2"
 lifecycleLivedataKtx = "2.8.5"
 lifecycleViewmodelKtx = "2.8.5"
-materialVersion = "1.9.0"
+materialVersion = "1.12.0"
 navigationFragmentKtx = "2.8.0"
 navigationUiKtx = "2.8.0"
-foundationLayoutAndroid = "1.7.0"
+foundationLayoutAndroid = "1.7.1"
 
 [libraries]
 androidx-appcompat-v161 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
