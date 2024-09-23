@@ -123,7 +123,7 @@ class Settings : AppCompatActivity() {
                 }
             }
 
-            var isDataSaved = false
+            var isDataSaved: Boolean = false
 
                 if (lolTag.isNotEmpty() && lolServer.isNotEmpty()) {
                     handleSaveButtonClick(username, lolTag, lolServer, "League of Legends")
