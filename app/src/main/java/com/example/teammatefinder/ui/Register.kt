@@ -41,24 +41,14 @@ class Register : AppCompatActivity() {
     private fun registerUser(username: String, password: String) {
         val passwordMatch = password == binding.passwordVerification.text.toString()
         val emailMatch = username == binding.emailVerification.text.toString()
-        val playsLOL = binding.lolCheckbox.isChecked
-        val playsValorant = binding.valorantCheckbox.isChecked
-        val playsTFT = binding.tftCheckbox.isChecked
-        var valid = true
 
         if (passwordMatch && emailMatch) {
             // Check if user exists only by username, not both username and password
             val userExists = databaseHelper.readUser(username, password)
-            if (!playsLOL && !playsValorant && !playsTFT)
-                valid = false
-            if (valid) {
                 if (!userExists) {
                     val insertId = databaseHelper.insertDataUsers(
                         username,
-                        password,
-                        playsLOL,
-                        playsValorant,
-                        playsTFT
+                        password
                     )
                     if (insertId != -1L) {
                         // Registration successful
@@ -73,10 +63,8 @@ class Register : AppCompatActivity() {
                     // User already exists
                     Toast.makeText(this, "User already exists", Toast.LENGTH_SHORT).show()
                 }
-            } else{
-                Toast.makeText(this, "Please select at least one game", Toast.LENGTH_SHORT).show()
             }
-        }else {
+        else {
             Toast.makeText(this, "Emails or passwords do not match", Toast.LENGTH_SHORT).show()
         }
         }

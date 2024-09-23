@@ -19,9 +19,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val COLUMN_ID = "id"
         private const val COLUMN_USERNAME = "username"
         private const val COLUMN_PASSWORD = "password"
-        private const val COLUMN_LOL_CHECK = "IsPlayingLol"
-        private const val COLUMN_VALORANT_CHECK = "IsPlayingValorant"
-        private const val COLUMN_TFT_CHECK = "IsPlayingTft"
         private const val COLUMN_SERVER = "Server"
         private const val COLUMN_TAG = "Tag"
         private const val COLUMN_DIVISION = "Division"
@@ -30,7 +27,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createUsersTableQuery =
-            ("CREATE TABLE $TABLE_NAME_USERS ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_PASSWORD TEXT, $COLUMN_LOL_CHECK INTEGER, $COLUMN_VALORANT_CHECK INTEGER, $COLUMN_TFT_CHECK INTEGER)")
+            ("CREATE TABLE $TABLE_NAME_USERS ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_PASSWORD TEXT)")
         val createLolTableQuery =
             ("CREATE TABLE $TABLE_NAME_LOL ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USERNAME TEXT, $COLUMN_TAG TEXT, $COLUMN_DIVISION TEXT, $COLUMN_SERVER TEXT, $COLUMN_WINRATE DOUBLE)")
         val createValorantTableQuery =
@@ -54,16 +51,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun insertDataUsers(
         username: String,
         password: String,
-        lol: Boolean,
-        valorant: Boolean,
-        tft: Boolean
     ): Long {
         val values = ContentValues().apply {
             put(COLUMN_USERNAME, username)
             put(COLUMN_PASSWORD, password)
-            put(COLUMN_LOL_CHECK, if (lol) 1 else 0)
-            put(COLUMN_VALORANT_CHECK, if (valorant) 1 else 0)
-            put(COLUMN_TFT_CHECK, if (tft) 1 else 0)
         }
         return writableDatabase.insert(TABLE_NAME_USERS, null, values)
     }
@@ -127,7 +118,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 arrayOf(COLUMN_USERNAME, COLUMN_TAG, COLUMN_DIVISION, COLUMN_SERVER, COLUMN_WINRATE)
             }
             else -> {
-                arrayOf(COLUMN_USERNAME, COLUMN_LOL_CHECK, COLUMN_VALORANT_CHECK, COLUMN_TFT_CHECK)
+                arrayOf(COLUMN_USERNAME)
             }
         }
 
@@ -184,20 +175,31 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     fun isFirstTimeEntry(username: String): Boolean {
+        return isFirstTimeEntryTable(username, "League of Legends") &&
+                isFirstTimeEntryTable(username, "Valorant") &&
+                isFirstTimeEntryTable(username, "TFT")
+    }
+
+    fun isFirstTimeEntryTable(username: String, game: String): Boolean {
         val db = readableDatabase
         val selection = "$COLUMN_USERNAME = ?"
         val selectionArgs = arrayOf(username)
-        val cursor1 = db.query(TABLE_NAME_LOL, null, selection, selectionArgs, null, null, null)
-        val cursor2 =
-            db.query(TABLE_NAME_VALORANT, null, selection, selectionArgs, null, null, null)
-        val cursor3 = db.query(TABLE_NAME_TFT, null, selection, selectionArgs, null, null, null)
-        val userLolExists = cursor1.count > 0
-        val userValorantExists = cursor2.count > 0
-        val userTftExists = cursor3.count > 0
-        cursor1.close()
-        cursor2.close()
-        cursor3.close()
-        return !userTftExists && !userValorantExists && !userLolExists
+
+        val table = when (game) {
+            "League of Legends" -> TABLE_NAME_LOL
+            "Valorant" -> TABLE_NAME_VALORANT
+            "TFT" -> TABLE_NAME_TFT
+            else -> null
+        }
+
+        table?.let {
+            val cursor = db.query(it, null, selection, selectionArgs, null, null, null)
+            val userExists = cursor.count > 0
+            cursor.close()
+            return !userExists
+        }
+        return false
     }
+
 
 }

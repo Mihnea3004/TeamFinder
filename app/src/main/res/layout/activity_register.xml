@@ -79,31 +79,6 @@
             android:textColorHint="@color/white"
             tools:ignore="HardcodedText,RtlSymmetry" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="League of Legends"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/white"
-            android:id="@+id/lol_checkbox"
-            android:textSize="20sp"
-            tools:ignore="HardcodedText" />
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Valorant"
-            android:textColor="@color/white"
-            android:id="@+id/valorant_checkbox"
-            android:textSize="20sp"
-            tools:ignore="HardcodedText" />
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TFT"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:id="@+id/tft_checkbox"
-            tools:ignore="HardcodedText" />
         <Button
             android:layout_width="110dp"
             android:layout_height="wrap_content"

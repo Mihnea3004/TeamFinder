@@ -26,7 +26,7 @@ data class Player(val username: String, val tag: String, val division: String, v
 class MainActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
-    private var riotApiKey = "RGAPI-9427d3eb-44da-48d6-92c6-eb59884ddce5"
+    private var riotApiKey = "RGAPI-5a9c03b3-2a3d-40d7-b822-23efdb3d9812"
     private var riotApiUrl = "https://eun1.api.riotgames.com/"
     private var riotRegionURL = "https://europe.api.riotgames.com"
 
@@ -128,6 +128,10 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.settings_nav -> {
                         Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, Settings::class.java)
+                        intent.putExtra("username", username)
+                        intent.putExtra("selectedOption", gameSelection.text.toString())
+                        startActivity(intent)
                         true
                     }
                     R.id.friends_nav -> {
@@ -153,12 +157,6 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RiotApiService::class.java)
-
-        val riotApiServiceAPI = Retrofit.Builder()
-            .baseUrl(riotApiUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(RiotApiService::class.java)
         val gamerTag = databaseHelper.retrieveDataUser(username,"LolPlayers")?.getString(1)
         Log.d("MainActivity", "GamerTag: $gamerTag")
         val (gameName, gameTag) = getGameTag(gamerTag.toString())
@@ -168,37 +166,7 @@ class MainActivity : AppCompatActivity() {
             Callback<RiotAccount> {
             override fun onResponse(call: Call<RiotAccount>, response: Response<RiotAccount>) {
                 val puuid = response.body()?.puuid ?: return
-                riotApiServiceAPI.getSummonerByPUUID(puuid, riotApiKey).enqueue(object : Callback<Summoner> {
-                    override fun onResponse(call: Call<Summoner>, response: Response<Summoner>) {
-                        val summoner = response.body() ?: return
-                        val encryptedSummonerId = summoner.id
-                        riotApiServiceAPI.getLeagueEntriesBySummonerId(encryptedSummonerId, riotApiKey)
-                            .enqueue(object : Callback<List<LeagueEntry>> {
-                                override fun onResponse(call: Call<List<LeagueEntry>>, response: Response<List<LeagueEntry>>) {
-                                    val leagueEntries = response.body() ?: return
-                                    for (leagueEntry in leagueEntries) {
-                                        if (leagueEntry.queueType == "RANKED_SOLO_5x5") {
-                                            val serverCursor = databaseHelper.retrieveDataUser(username, "LolPlayers")
-                                            val server = serverCursor?.use {
-                                                it.getString(it.getColumnIndexOrThrow("Server"))
-                                            } ?: ""
-                                            val winrate = (leagueEntry.wins.toDouble() / (leagueEntry.wins + leagueEntry.losses).toDouble() * 100).toString()
-                                            databaseHelper.replaceDataGame(username, "League of Legends",
-                                                gamerTag.toString(), leagueEntry.tier + " " + leagueEntry.rank, server, winrate)
-                                        }
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<List<LeagueEntry>>, t: Throwable) {
-                                    Log.e("RiotApiService", "Error fetching league entries", t)
-                                }
-                            })
-                    }
-
-                    override fun onFailure(call: Call<Summoner>, t: Throwable) {
-                        Log.e("RiotApiService", "Error fetching summoner", t)
-                    }
-                })
+                getLeagueData(puuid,gamerTag.toString(),username)
             }
 
             override fun onFailure(call: Call<RiotAccount>, t: Throwable) {
@@ -206,7 +174,44 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+    private fun getLeagueData(puuid: String,gamerTag: String, username: String) {
+        val riotApiServiceAPI = Retrofit.Builder()
+            .baseUrl(riotApiUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(RiotApiService::class.java)
+        riotApiServiceAPI.getSummonerByPUUID(puuid, riotApiKey).enqueue(object : Callback<Summoner> {
+            override fun onResponse(call: Call<Summoner>, response: Response<Summoner>) {
+                val summoner = response.body() ?: return
+                val encryptedSummonerId = summoner.id
+                riotApiServiceAPI.getLeagueEntriesBySummonerId(encryptedSummonerId, riotApiKey)
+                    .enqueue(object : Callback<List<LeagueEntry>> {
+                        override fun onResponse(call: Call<List<LeagueEntry>>, response: Response<List<LeagueEntry>>) {
+                            val leagueEntries = response.body() ?: return
+                            for (leagueEntry in leagueEntries) {
+                                if (leagueEntry.queueType == "RANKED_SOLO_5x5") {
+                                    val serverCursor = databaseHelper.retrieveDataUser(username, "LolPlayers")
+                                    val server = serverCursor?.use {
+                                        it.getString(it.getColumnIndexOrThrow("Server"))
+                                    } ?: ""
+                                    val winrate = (leagueEntry.wins.toDouble() / (leagueEntry.wins + leagueEntry.losses).toDouble() * 100).toString()
+                                    databaseHelper.replaceDataGame(username, "League of Legends",
+                                        gamerTag, leagueEntry.tier + " " + leagueEntry.rank, server, winrate)
+                                }
+                            }
+                        }
 
+                        override fun onFailure(call: Call<List<LeagueEntry>>, t: Throwable) {
+                            Log.e("RiotApiService", "Error fetching league entries", t)
+                        }
+                    })
+            }
+
+            override fun onFailure(call: Call<Summoner>, t: Throwable) {
+                Log.e("RiotApiService", "Error fetching summoner", t)
+            }
+        })
+    }
     private fun getGameTag(tag: String): Pair<String, String> {
         val gameName = tag.substringBefore("#")
         val gameTag = tag.substringAfter("#")

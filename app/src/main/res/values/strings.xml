@@ -15,4 +15,27 @@
     <string name="profile_server">Server Placeholder</string>
     <string name="settings_header">Settings</string>
     <string name="save_button">Save</string>
+    <string-array name="game_selection">
+        <item>League of Legends</item>
+        <item>Valorant</item>
+        <item>TFT</item>
+    </string-array>
+    <string-array name="servers">
+        <item>NA</item>
+        <item>EUW</item>
+        <item>EUNE</item>
+        <item>LAN</item>
+        <item>LAS</item>
+        <item>BR</item>
+        <item>TR</item>
+        <item>RU</item>
+        <item>OCE</item>
+        <item>JP</item>
+        <item>KR</item>
+        <item>PH</item>
+        <item>SG</item>
+        <item>TH</item>
+        <item>TW</item>
+        <item>VN</item>
+    </string-array>
 </resources>
