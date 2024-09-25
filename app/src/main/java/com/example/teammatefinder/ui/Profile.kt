@@ -1,5 +1,6 @@
 package com.example.teammatefinder.ui
 
+import android.database.Cursor
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -15,9 +16,9 @@ class Profile : AppCompatActivity() {
 
     private lateinit var riotApiService: RiotApiService
     private lateinit var riotApiService2: RiotApiService
-    private val apiKEY = "RGAPI-5a9c03b3-2a3d-40d7-b822-23efdb3d9812"
-    private val baseURLServer = "https://eun1.api.riotgames.com"
-    private val baseURLREGION = "https://europe.api.riotgames.com"
+    private val apiKEY = "RGAPI-44c305da-7cbe-421a-9f5c-325a1d534435"
+    private var baseURLServer = "https://eun1.api.riotgames.com"
+    private var baseURLREGION = "https://europe.api.riotgames.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +37,9 @@ class Profile : AppCompatActivity() {
         riotApiService = retrofit.create(RiotApiService::class.java)
         val retrofit2 = RetrofitClient.getClient(baseURLServer)
         riotApiService2 = retrofit2.create(RiotApiService::class.java)
+
+        baseURLServer = getRiotURL(getServer(username, "League of Legends"))
+        baseURLREGION = getRiotRegion(getServer(username, "League of Legends"))
 
         val cursor = databaseHelper.retrieveDataUser(username, "LolPlayers")
         if (cursor!!.moveToFirst()) {
@@ -183,5 +187,82 @@ class Profile : AppCompatActivity() {
                     Log.e("Profile", "Failure: ${t.message}")
                 }
             })
+    }
+    private fun getServer(username: String, game: String): String {
+        val databaseHelper = DatabaseHelper(this)
+        val cursor: Cursor
+        when (game) {
+            "League of Legends" -> {
+                cursor = databaseHelper.retrieveDataUser(username, "LolPlayers")!!
+                cursor.use {
+                    if (it.moveToFirst()) {
+                        return it.getString(3).toString()
+                    }
+                }
+            }
+
+            "Valorant" -> {
+                cursor = databaseHelper.retrieveDataUser(username, "ValorantPlayers")!!
+                cursor.use {
+                    if (it.moveToFirst()) {
+                        return it.getString(3).toString()
+                    }
+                }
+            }
+
+            "TFT" -> {
+                cursor = databaseHelper.retrieveDataUser(username, "TFTPlayers")!!
+                cursor.use {
+                    if (it.moveToFirst()) {
+                        return it.getString(3).toString()
+                    }
+                }
+            }
+
+            else -> throw IllegalArgumentException("Unsupported game type")
+        }
+        return "N/A"
+    }
+    private fun getRiotURL(region: String): String {
+        when(region){
+            "BR" -> return "https://br1.api.riotgames.com"
+            "EUNE" -> return "https://eun1.api.riotgames.com"
+            "EUW" -> return "https://euw1.api.riotgames.com"
+            "JP" -> return "https://jp1.api.riotgames.com"
+            "KR" -> return "https://kr.api.riotgames.com"
+            "LAN" -> return "https://la1.api.riotgames.com"
+            "LAS" -> return "https://la2.api.riotgames.com"
+            "NA" -> return "https://na1.api.riotgames.com"
+            "OCE" -> return "https://oc1.api.riotgames.com"
+            "RU" -> return "https://ru.api.riotgames.com"
+            "TR" -> return "https://tr1.api.riotgames.com"
+            "PH" -> return "https://ph2.api.riotgames.com"
+            "SG" -> return "https://sg2.api.riotgames.com"
+            "TH" -> return "https://th2.api.riotgames.com"
+            "TW" -> return "https://tw2.api.riotgames.com"
+            "VN" -> return "https://vn2.api.riotgames.com"
+            else -> return "https://eun1.api.riotgames.com"
+        }
+    }
+    private fun getRiotRegion(region: String): String {
+        when(region){
+            "BR" -> return "https://americas.api.riotgames.com"
+            "EUNE" -> return "https://europe.api.riotgames.com"
+            "EUW" -> return "https://europe.api.riotgames.com"
+            "JP" -> return "https://asia.api.riotgames.com"
+            "KR" -> return "https://asia.api.riotgames.com"
+            "LAN" -> return "https://americas.api.riotgames.com"
+            "LAS" -> return "https://americas.api.riotgames.com"
+            "NA" -> return "https://americas.api.riotgames.com"
+            "OCE" -> return "https://asia.api.riotgames.com"
+            "RU" -> return "https://europe.api.riotgames.com"
+            "TR" -> return "https://europe.api.riotgames.com"
+            "PH" -> return "https://sea.api.riotgames.com"
+            "SG" -> return "https://sea.api.riotgames.com"
+            "TH" -> return "https://sea.api.riotgames.com"
+            "TW" -> return "https://sea.api.riotgames.com"
+            "VN" -> return "https://sea.api.riotgames.com"
+            else -> return "https://europe.api.riotgames.com"
+        }
     }
 }

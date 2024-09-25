@@ -52,7 +52,7 @@ class Settings : AppCompatActivity() {
                 id: Long
             ) {
                 currentServer =
-                    serverSpinner.selectedItem.toString()  // This is the same for all cases
+                    serverSpinner.selectedItem.toString()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -100,12 +100,10 @@ class Settings : AppCompatActivity() {
             }
         }
         saveButton.setOnClickListener {
-            // Read the current tag and server values based on the selected game
             val selectedGame = spinner.selectedItem.toString()
             val currentTagText = tagText.text.toString()
             val currentServer = serverSpinner.selectedItem.toString()
 
-            // Save data for each game
             when (selectedGame) {
                 "League of Legends" -> {
                     lolTag = currentTagText
@@ -123,7 +121,7 @@ class Settings : AppCompatActivity() {
                 }
             }
 
-            var isDataSaved: Boolean = false
+            var isDataSaved = false
 
                 if (lolTag.isNotEmpty() && lolServer.isNotEmpty()) {
                     handleSaveButtonClick(username, lolTag, lolServer, "League of Legends")

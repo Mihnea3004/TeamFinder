@@ -147,15 +147,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun getAllPlayers(tableName: String): List<Player> {
         val playerList = mutableListOf<Player>()
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT tag, division, winrate, server FROM $tableName", null)
+        val cursor = db.rawQuery("SELECT username, tag, division, server, winrate FROM $tableName", null)
 
         if (cursor.moveToFirst()) {
             do {
-                val tag = cursor.getString(cursor.getColumnIndexOrThrow("tag"))
-                val division = cursor.getString(cursor.getColumnIndexOrThrow("division"))
-                val winrate = cursor.getString(cursor.getColumnIndexOrThrow("winrate"))
-                val server = cursor.getDouble(cursor.getColumnIndexOrThrow("server"))
-                val username = cursor.getString(cursor.getColumnIndexOrThrow("username"))
+                val tag = cursor.getString(1)
+                val division = cursor.getString(2)
+                val winrate = cursor.getString(4)
+                val server = cursor.getDouble(3)
+                val username = cursor.getString(0)
                 playerList.add(Player(username, tag, division, winrate, server))
             } while (cursor.moveToNext())
         }
