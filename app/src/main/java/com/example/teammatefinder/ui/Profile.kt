@@ -16,7 +16,7 @@ class Profile : AppCompatActivity() {
 
     private lateinit var riotApiService: RiotApiService
     private lateinit var riotApiService2: RiotApiService
-    private val apiKEY = "RGAPI-44c305da-7cbe-421a-9f5c-325a1d534435"
+    private val apiKEY = "put api key here"
     private var baseURLServer = "https://eun1.api.riotgames.com"
     private var baseURLREGION = "https://europe.api.riotgames.com"
 

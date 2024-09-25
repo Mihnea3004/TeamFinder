@@ -27,7 +27,7 @@ data class Player(val username: String, val tag: String, val division: String, v
 class MainActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
-    private var riotApiKey = "RGAPI-44c305da-7cbe-421a-9f5c-325a1d534435"
+    private var riotApiKey = "put api key here"
     private var riotApiUrl = "https://eun1.api.riotgames.com/"
     private var riotRegionURL = "https://europe.api.riotgames.com"
 
