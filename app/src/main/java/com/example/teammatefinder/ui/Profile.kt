@@ -16,7 +16,7 @@ class Profile : AppCompatActivity() {
 
     private lateinit var riotApiService: RiotApiService
     private lateinit var riotApiService2: RiotApiService
-    private val apiKEY = "put api key here"
+    private val apiKEY = "enter api here"
     private var baseURLServer = "https://eun1.api.riotgames.com"
     private var baseURLREGION = "https://europe.api.riotgames.com"
 
@@ -26,7 +26,8 @@ class Profile : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         val databaseHelper = DatabaseHelper(this)
-        val username = intent.getStringExtra("username") ?: return
+        val username = intent.getStringExtra("username")
+        Log.d("Profile", "Username: $username")
         val selectedOption = intent.getStringExtra("selectedOption") ?: return
         val serverView: TextView = findViewById(R.id.profile_server)
         val headerView: TextView = findViewById(R.id.profile_text)
@@ -38,10 +39,10 @@ class Profile : AppCompatActivity() {
         val retrofit2 = RetrofitClient.getClient(baseURLServer)
         riotApiService2 = retrofit2.create(RiotApiService::class.java)
 
-        baseURLServer = getRiotURL(getServer(username, "League of Legends"))
-        baseURLREGION = getRiotRegion(getServer(username, "League of Legends"))
+        baseURLServer = getRiotURL(getServer(username.toString(), "League of Legends"))
+        baseURLREGION = getRiotRegion(getServer(username.toString(), "League of Legends"))
 
-        val cursor = databaseHelper.retrieveDataUser(username, "LolPlayers")
+        val cursor = databaseHelper.retrieveDataUser(username.toString(), "LolPlayers")
         if (cursor!!.moveToFirst()) {
             val summonerName = cursor.getString(1)
             val lolServer = cursor.getString(3)
@@ -60,7 +61,7 @@ class Profile : AppCompatActivity() {
                         }
                     }
                     serverView.text = lolServer
-                    "${winrate.substring(0,5)}%".also { winrateView.text = it }
+                    "${winrate.toDouble()}%".also { winrateView.text = it }
                     profileRankView.text = rank
                     updateRankView(rankNew)
 

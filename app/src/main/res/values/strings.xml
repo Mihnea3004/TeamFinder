@@ -15,6 +15,10 @@
     <string name="profile_server">Server Placeholder</string>
     <string name="settings_header">Settings</string>
     <string name="save_button">Save</string>
+    <string name="card_tag">Card Tag</string>
+    <string name="card_server">Card Server</string>
+    <string name="card_winrate">Card Winrate</string>
+    <string name="add_button">+</string>
     <string-array name="game_selection">
         <item>League of Legends</item>
         <item>Valorant</item>

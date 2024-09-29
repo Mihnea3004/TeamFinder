@@ -154,9 +154,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 val tag = cursor.getString(1)
                 val division = cursor.getString(2)
                 val winrate = cursor.getString(4)
-                val server = cursor.getDouble(3)
+                val server = cursor.getString(3)
                 val username = cursor.getString(0)
-                playerList.add(Player(username, tag, division, winrate, server))
+                playerList.add(Player(username, tag, division, server, winrate))
             } while (cursor.moveToNext())
         }
 

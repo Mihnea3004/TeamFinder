@@ -21,13 +21,13 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-data class Player(val username: String, val tag: String, val division: String, val server: String, val winrate: Double)
+data class Player(val username: String, val tag: String, val division: String, val server: String, val winrate: String)
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
-    private var riotApiKey = "put api key here"
+    private var riotApiKey = "enter api here"
     private var riotApiUrl = "https://eun1.api.riotgames.com/"
     private var riotRegionURL = "https://europe.api.riotgames.com"
 
@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
                                             it.getString(it.getColumnIndexOrThrow("Server"))
                                         } ?: ""
                                         val winrate =
-                                            (leagueEntry.wins.toDouble() / (leagueEntry.wins + leagueEntry.losses).toDouble() * 100).toString()
+                                            (leagueEntry.wins / (leagueEntry.wins + leagueEntry.losses) * 100).toDouble().toString()
                                         databaseHelper.replaceDataGame(
                                             username,
                                             "League of Legends",
@@ -308,11 +308,6 @@ class MainActivity : AppCompatActivity() {
                     playerList,
                     username, onItemClicked = { clickedPlayer ->
                         run {
-                            if (clickedPlayer == null) {
-                                Log.e("Error", "Clicked player is null")
-                                return@run
-                            }
-
                             Log.d("ClickedPlayer", clickedPlayer.toString())
 
                             val intent = Intent(this, Profile::class.java)
@@ -337,10 +332,6 @@ class MainActivity : AppCompatActivity() {
                     username, onItemClicked = {
                             clickedPlayer ->
                         run {
-                            if (clickedPlayer == null) {
-                                Log.e("Error", "Clicked player is null")
-                                return@run
-                            }
 
                             Log.d("ClickedPlayer", clickedPlayer.toString())
 
@@ -365,10 +356,6 @@ class MainActivity : AppCompatActivity() {
                     playerList,
                     username, onItemClicked = { clickedPlayer ->
                         run {
-                            if (clickedPlayer == null) {
-                                Log.e("Error", "Clicked player is null")
-                                return@run
-                            }
 
                             Log.d("ClickedPlayer", clickedPlayer.toString())
 
