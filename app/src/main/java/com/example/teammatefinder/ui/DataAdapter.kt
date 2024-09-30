@@ -45,9 +45,6 @@ class DataAdapter(
                     "CHALLENGER" -> holder.divisionImageView.setImageResource(R.drawable.challenger_lol)
                     else -> holder.divisionImageView.setImageResource(R.drawable.unranked_lol)
                 }
-                //holder.addButton.setOnClickListener {
-
-                //}
             }
             "Valorant" -> {
              //   when (player.division) {
@@ -80,7 +77,6 @@ class DataAdapter(
             return players.filter { it.username != currentUser }.size
         }
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val addButton : ImageButton = view.findViewById(R.id.cardButton)
         val tagTextView: TextView = view.findViewById(R.id.cardTag)
         val divisionImageView: ImageView = view.findViewById(R.id.cardImage)
         val winrateTextView: TextView = view.findViewById(R.id.cardWinrate)

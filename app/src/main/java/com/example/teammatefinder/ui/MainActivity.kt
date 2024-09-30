@@ -88,10 +88,6 @@ class MainActivity : AppCompatActivity() {
             }
             navView.setNavigationItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.home_nav -> {
-                        Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show()
-                        true
-                    }
 
                     R.id.profile_nav -> {
                         Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
@@ -108,16 +104,6 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("username", username)
                         intent.putExtra("selectedOption", gameSelection.text.toString())
                         startActivity(intent)
-                        true
-                    }
-
-                    R.id.friends_nav -> {
-                        Toast.makeText(this, "Friends clicked", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-
-                    R.id.messages_nav -> {
-                        Toast.makeText(this, "Messages clicked", Toast.LENGTH_SHORT).show()
                         true
                     }
 

@@ -44,7 +44,7 @@ class Register : AppCompatActivity() {
 
         if (passwordMatch && emailMatch) {
             // Check if user exists only by username, not both username and password
-            val userExists: Boolean = databaseHelper.readUser(username, password)
+            val userExists = databaseHelper.readUser(username, password)
                 if (!userExists) {
                     val insertId = databaseHelper.insertDataUsers(
                         username,
